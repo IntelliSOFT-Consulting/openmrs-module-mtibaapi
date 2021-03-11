@@ -9,58 +9,29 @@
  */
 package org.openmrs.module.mtibaapis.web.controller;
 
-import java.io.Console;
-import java.util.List;
-
-import javax.servlet.http.HttpSession;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.openmrs.module.webservices.rest.web.RestConstants;
+import org.openmrs.module.webservices.rest.web.v1_0.controller.MainResourceController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.openmrs.User;
-import org.openmrs.api.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * This class configured as controller using annotation and mapped with the URL of
  * 'module/${rootArtifactid}/${rootArtifactid}Link.form'.
  */
-@Controller("${rootrootArtifactid}.mtiba")
-@RequestMapping("/rest/" + RestConstants.VERSION_2 + "/mtiba")
+@Controller
+@RequestMapping("/rest/" + RestConstants.VERSION_1 + "/mtibaapi")
 public class MtibaapisController extends MainResourceController {
 	
 	/** Logger for this class and subclasses */
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	/** Success form view name */
-	private final String VIEW = "/module/${rootArtifactid}/${rootArtifactid}";
-	
-	/**
-	 * Initially called after the getUsers method to get the landing form name
-	 * 
-	 * @return String form view name
-	 */
-	@RequestMapping(method = RequestMethod.GET)
-	public String onGet() {
-		return VIEW;
-	}
-	
-	/**
-	 * All the parameters are optional based on the necessity
-	 * 
-	 * @param httpSession
-	 * @param anyRequestObject
-	 * @param errors
-	 * @return
-	 */
-	
-	@RequestMapping(value = "/auth/accessToken", method = RequestMethod.POST)
+	@RequestMapping(value = "/auth/accesstoken", method = RequestMethod.POST)
 	public String getAccessToken() {
 		HttpResponse<String> response = Unirest
 		        .post("https://api.ke-acc.carepay.dev/api/integration/auth/accessToken")
@@ -68,6 +39,7 @@ public class MtibaapisController extends MainResourceController {
 		        .body(
 		            "{\n\t\"username\": \"e-hospital\",\n\t\"password\": \"wtgN33Qmlga8JgMag1RYFKdwsaFjcrz6wuk49taeHKW2IrnFGIDhrDBdikPj54HE\"\n}")
 		        .asString();
+		log.info(response.getBody());
 		return response.getBody();
 	};
 	
