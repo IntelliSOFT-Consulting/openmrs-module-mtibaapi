@@ -1,0 +1,6 @@
+/home/davie/openmrs_mtiba/openmrs-module-mtibaapi/api/src/main/java/org/openmrs/module/mtibaapis/api/dao/MtibaapisDao.java
+/home/davie/openmrs_mtiba/openmrs-module-mtibaapi/api/src/main/java/org/openmrs/module/mtibaapis/MtibaapisConfig.java
+/home/davie/openmrs_mtiba/openmrs-module-mtibaapi/api/src/main/java/org/openmrs/module/mtibaapis/MtibaapisActivator.java
+/home/davie/openmrs_mtiba/openmrs-module-mtibaapi/api/src/main/java/org/openmrs/module/mtibaapis/api/MtibaapisService.java
+/home/davie/openmrs_mtiba/openmrs-module-mtibaapi/api/src/main/java/org/openmrs/module/mtibaapis/Item.java
+/home/davie/openmrs_mtiba/openmrs-module-mtibaapi/api/src/main/java/org/openmrs/module/mtibaapis/api/impl/MtibaapisServiceImpl.java
