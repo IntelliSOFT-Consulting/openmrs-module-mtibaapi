@@ -1,6 +1,6 @@
-org/openmrs/module/mtibaapis/api/impl/MtibaapisServiceImpl.class
-org/openmrs/module/mtibaapis/MtibaapisConfig.class
-org/openmrs/module/mtibaapis/api/MtibaapisService.class
-org/openmrs/module/mtibaapis/Item.class
-org/openmrs/module/mtibaapis/api/dao/MtibaapisDao.class
-org/openmrs/module/mtibaapis/MtibaapisActivator.class
+org\openmrs\module\mtibaapis\api\dao\MtibaapisDao.class
+org\openmrs\module\mtibaapis\Item.class
+org\openmrs\module\mtibaapis\MtibaapisActivator.class
+org\openmrs\module\mtibaapis\api\impl\MtibaapisServiceImpl.class
+org\openmrs\module\mtibaapis\api\MtibaapisService.class
+org\openmrs\module\mtibaapis\MtibaapisConfig.class

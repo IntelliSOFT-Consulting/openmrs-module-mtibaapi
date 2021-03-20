@@ -9,30 +9,36 @@
  */
 package org.openmrs.module.mtibaapis.web.controller;
 
-import groovy.transform.ASTTest;
+import java.io.IOException;
+
+import com.google.gson.Gson;
+
+import org.apache.commons.cli.MissingArgumentException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.module.webservices.rest.web.RestConstants;
-import org.openmrs.module.webservices.rest.web.v1_0.controller.MainResourceController;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * This class configured as controller using annotation and mapped with the URL of
  * 'module/${rootArtifactid}/${rootArtifactid}Link.form'.
  */
 @Controller
-@RequestMapping("/rest/" + RestConstants.VERSION_1 + "/mtibaapi")
-public class MtibaapisController extends MainResourceController {
+@RequestMapping("/rest/v1/mtibaapi")
+public class MtibaapisController {
 	
 	/** Logger for this class and subclasses */
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	@RequestMapping(value = "/auth/accesstoken", method = RequestMethod.POST)
 	public String getAccessToken() {
 		HttpResponse<String> response = Unirest
 		        .post("https://api.ke-acc.carepay.dev/api/integration/auth/accessToken")
@@ -44,14 +50,79 @@ public class MtibaapisController extends MainResourceController {
 		return response.getBody();
 	};
 	
-	@RequestMapping(value = "/auth/getPatientProfile", method = RequestMethod.GET)
-	public String getTreatmentInfo() {
-		HttpResponse<String> response = Unirest
-		        .get("https://api.ke-acc.carepay.dev/api/integration/treatments/{code}")
-		        .header(
-		            "Authorization",
-		            "Bearer eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJlLWhvc3BpdGFsIiwicm9sZXMiOlsiUFJPVklERVJfVVNFUl9NQU5BR0VSIiwiUFJPVklERVJfQ0FTSElFUiIsIlBST1ZJREVSX1JFQ0VQVElPTklTVCIsIlBST1ZJREVSX01FRElDIl0sInVzZXJJZCI6IjU5NjMzIiwiZXhwIjoxNjE1NjM2Mzk5LCJncmFudHMiOnt9fQ.NGtbegRYWWGrTAPBjGUTsDvPv64LycnW9GaN7F6RrEQDiW2qGahPfgTC2q1rnDduFuamhxEtk0UV94M7LZltrgy18gv5Cn8Z7CJ7HN6uq3J5fZAyuhEER9Rqrm79TIBLweK4YAKvRo0tHOGlSF1VGY8n3xuG1cgymroJuCWHgO8lHCAy0_2QF68HDvXXG0InMGhhJ9ZDn75vu8cM5vPLUB3BpZtPwPtsBy-_qQejLcNUfyy_G-IBTMRhLJv-3D3SfTeK5KtJsDPb07MMYvPlVXHIlSSpAUFSxJfDK97zk4ubC3EY2VVwnu17xrlnL8OYYiaI5LONZTfe9lZTAWaa1Q")
-		        .header("Content-Type", "application/json").header("", "").routeParam("code", "MTI44827").asString();
-		return response.getBody();
+	/**
+	 * @should return a proper response
+	 */
+	@RequestMapping(value = "/treatments/{treatmentCode}", method = RequestMethod.GET)
+	public @ResponseBody
+	okhttp3.ResponseBody getTreatmentInfo(@PathVariable("treatmentCode") String treatmentCode) throws IOException,
+	        MissingArgumentException {
+		OkHttpClient client = new OkHttpClient();
+		
+		if (treatmentCode == null) {
+			throw new MissingArgumentException("Treatment Code is missing");
+		}
+		
+		Request request = new Request.Builder()
+		        .url("https://api.ke-acc.carepay.dev/api/integration/treatments/MTI44827")
+		        .get()
+		        .addHeader(
+		            "authorization",
+		            "Bearer eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJlLWhvc3BpdGFsIiwicm9sZXMiOlsiUFJPVklERVJfQ0FTSElFUiIsIlBST1ZJREVSX1VTRVJfTUFOQUdFUiIsIlBST1ZJREVSX1JFQ0VQVElPTklTVCIsIlBST1ZJREVSX01FRElDIl0sInVzZXJJZCI6IjU5NjMzIiwiZXhwIjoxNjE1NDc4MTMyLCJncmFudHMiOnt9fQ.hDS_UhKSfHFkrs1jdfaJNU20tFwGSktd_IbJpBBWY6x06of4gETln7fVTDWTppgXkAolzbf_qJvAMFyek1dh_QJUTE3IOfBgGktruMBZk6Nhv7xKBIpdeQC_T7G0f9SXLMaytee3giTyCbNeIIdQnD73BJ5Kq4c1Dvb5DFt8bXyrJDtXHIUyHauGV8BnXUe9W2cn9QGWtVu1tmjKJbGPodN0zuVu9Dcqbpz9CsVBkeZX9HMEyly9AEN9YdoV9pbDf5S_Y-tv6nYqnHbD6PwQXP5Ob9YZOexKQwCNDln-IMVc_KyB54qapsh4wSlA6cM38XVjBxqOEGP82ErICU_uig")
+		        .addHeader("content-type", "application/json").build();
+		
+		Response response = client.newCall(request).execute();
+		return response.body();
+	};
+	
+	/**
+	 * @should return treatment information
+	 */
+	@RequestMapping(value = "/treatments", method = RequestMethod.GET)
+	public @ResponseBody
+	MtibaResponse getTreatmentInfo1() throws IOException, MissingArgumentException {
+		OkHttpClient client = new OkHttpClient();
+		
+		TreatmentData treatmentData = new TreatmentData();
+		Request request = new Request.Builder()
+		        .url("https://api.ke-acc.carepay.dev/api/integration/treatments/MTI44827")
+		        .get()
+		        .addHeader(
+		            "authorization",
+		            "Bearer eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJlLWhvc3BpdGFsIiwicm9sZXMiOlsiUFJPVklERVJfQ0FTSElFUiIsIlBST1ZJREVSX1VTRVJfTUFOQUdFUiIsIlBST1ZJREVSX1JFQ0VQVElPTklTVCIsIlBST1ZJREVSX01FRElDIl0sInVzZXJJZCI6IjU5NjMzIiwiZXhwIjoxNjE1NDc4MTMyLCJncmFudHMiOnt9fQ.hDS_UhKSfHFkrs1jdfaJNU20tFwGSktd_IbJpBBWY6x06of4gETln7fVTDWTppgXkAolzbf_qJvAMFyek1dh_QJUTE3IOfBgGktruMBZk6Nhv7xKBIpdeQC_T7G0f9SXLMaytee3giTyCbNeIIdQnD73BJ5Kq4c1Dvb5DFt8bXyrJDtXHIUyHauGV8BnXUe9W2cn9QGWtVu1tmjKJbGPodN0zuVu9Dcqbpz9CsVBkeZX9HMEyly9AEN9YdoV9pbDf5S_Y-tv6nYqnHbD6PwQXP5Ob9YZOexKQwCNDln-IMVc_KyB54qapsh4wSlA6cM38XVjBxqOEGP82ErICU_uig")
+		        .addHeader("content-type", "application/json").build();
+		
+		Response response = client.newCall(request).execute();
+		String responseText = response.body().string();
+		MtibaResponse mtibaResponse = new MtibaResponse();
+		
+		Gson gson = new Gson();
+		if (responseText.contains("error")) {
+			MtibaErrorResponse errorResponse = gson.fromJson(responseText, MtibaErrorResponse.class);
+
+			mtibaResponse.status = errorResponse.getStatus();
+			mtibaResponse.response = errorResponse;
+			log.debug(errorResponse);
+		} else {
+			treatmentData =  gson.fromJson(responseText, TreatmentData.class);
+
+			mtibaResponse.status = "200";
+			mtibaResponse.response = treatmentData;
+		}
+		
+		// treatmentData 
+		return mtibaResponse;
 	};
 }
+
+
+/**
+ * TODOs: 
+ * Complete the TreatmentData class properties
+ * Handle Dynamic Access Token generation
+ * Test the new end-point on OpenMRS
+ * 
+ * Non-priotity
+ * Create a unit test for the endpoint(s)
+ */
+

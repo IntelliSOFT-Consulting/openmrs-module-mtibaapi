@@ -1,1 +1,4 @@
-org/openmrs/module/mtibaapis/web/controller/MtibaapisController.class
+org\openmrs\module\mtibaapis\web\controller\MtibaResponse.class
+org\openmrs\module\mtibaapis\web\controller\TreatmentData.class
+org\openmrs\module\mtibaapis\web\controller\MtibaapisController.class
+org\openmrs\module\mtibaapis\web\controller\MtibaErrorResponse.class
