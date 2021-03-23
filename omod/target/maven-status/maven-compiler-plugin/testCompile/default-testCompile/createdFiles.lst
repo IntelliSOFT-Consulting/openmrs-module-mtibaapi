@@ -1,2 +1,3 @@
+org/openmrs/module/mtibaapis/web/controller/TestConfig.class
+org/openmrs/module/mtibaapis/web/controller/MtibaapisControllerTest.class
 mtibaApiTest.class
-org\openmrs\module\mtibaapis\web\controller\MtibaapisControllerTest.class

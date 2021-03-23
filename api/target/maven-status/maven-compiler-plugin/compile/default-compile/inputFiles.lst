@@ -1,6 +1,6 @@
-D:\DEVELOPMENT\openmrs-module-mtibaapi\api\src\main\java\org\openmrs\module\mtibaapis\api\dao\MtibaapisDao.java
-D:\DEVELOPMENT\openmrs-module-mtibaapi\api\src\main\java\org\openmrs\module\mtibaapis\Item.java
-D:\DEVELOPMENT\openmrs-module-mtibaapi\api\src\main\java\org\openmrs\module\mtibaapis\api\impl\MtibaapisServiceImpl.java
-D:\DEVELOPMENT\openmrs-module-mtibaapi\api\src\main\java\org\openmrs\module\mtibaapis\MtibaapisConfig.java
-D:\DEVELOPMENT\openmrs-module-mtibaapi\api\src\main\java\org\openmrs\module\mtibaapis\api\MtibaapisService.java
-D:\DEVELOPMENT\openmrs-module-mtibaapi\api\src\main\java\org\openmrs\module\mtibaapis\MtibaapisActivator.java
+/Users/komondi/Development/openmrs-module-mtibaapi/api/src/main/java/org/openmrs/module/mtibaapis/api/dao/MtibaapisDao.java
+/Users/komondi/Development/openmrs-module-mtibaapi/api/src/main/java/org/openmrs/module/mtibaapis/MtibaapisConfig.java
+/Users/komondi/Development/openmrs-module-mtibaapi/api/src/main/java/org/openmrs/module/mtibaapis/Item.java
+/Users/komondi/Development/openmrs-module-mtibaapi/api/src/main/java/org/openmrs/module/mtibaapis/MtibaapisActivator.java
+/Users/komondi/Development/openmrs-module-mtibaapi/api/src/main/java/org/openmrs/module/mtibaapis/api/MtibaapisService.java
+/Users/komondi/Development/openmrs-module-mtibaapi/api/src/main/java/org/openmrs/module/mtibaapis/api/impl/MtibaapisServiceImpl.java

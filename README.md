@@ -1,4 +1,4 @@
-${moduleName}
+Mtiba APIs Proxy Module
 ==========================
 
 Description

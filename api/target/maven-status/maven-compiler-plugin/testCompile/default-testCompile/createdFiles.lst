@@ -1,2 +1,2 @@
-org\openmrs\module\mtibaapis\api\dao\MtibaapisDaoTest.class
-org\openmrs\module\mtibaapis\api\MtibaapisServiceTest.class
+org/openmrs/module/mtibaapis/api/dao/MtibaapisDaoTest.class
+org/openmrs/module/mtibaapis/api/MtibaapisServiceTest.class

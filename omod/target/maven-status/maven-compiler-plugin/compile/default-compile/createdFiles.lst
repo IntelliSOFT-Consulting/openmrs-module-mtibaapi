@@ -1,4 +1,13 @@
-org\openmrs\module\mtibaapis\web\controller\MtibaResponse.class
-org\openmrs\module\mtibaapis\web\controller\TreatmentData.class
-org\openmrs\module\mtibaapis\web\controller\MtibaapisController.class
-org\openmrs\module\mtibaapis\web\controller\MtibaErrorResponse.class
+org/openmrs/module/mtibaapis/web/controller/MtibaErrorResponse.class
+org/openmrs/module/mtibaapis/web/controller/TreatmentData$Provider.class
+org/openmrs/module/mtibaapis/web/controller/MtibaapisController.class
+org/openmrs/module/mtibaapis/web/controller/TreatmentData$Treatment.class
+org/openmrs/module/mtibaapis/web/controller/TreatmentData$Person$Identification.class
+org/openmrs/module/mtibaapis/web/controller/TreatmentData.class
+org/openmrs/module/mtibaapis/web/controller/TreatmentData$Person.class
+org/openmrs/module/mtibaapis/web/controller/TreatmentData$AccountHolder.class
+org/openmrs/module/mtibaapis/web/controller/TreatmentData$1.class
+org/openmrs/module/mtibaapis/web/controller/MtibaResponse.class
+org/openmrs/module/mtibaapis/web/controller/TreatmentData$Patient.class
+org/openmrs/module/mtibaapis/web/controller/TreatmentData$AccountHolder$Account.class
+org/openmrs/module/mtibaapis/web/controller/TreatmentData$Limit.class
