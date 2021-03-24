@@ -30,7 +30,7 @@ public class MtibaapisControllerTest {
 	private MockMvc mockMvc;
 	
 	private MtibaapisController controllers;
-
+	
 	private String treatmentCode;
 	
 	@Before
@@ -46,8 +46,7 @@ public class MtibaapisControllerTest {
 	 */
 	@Test
 	public void getTreatmentInfo_shouldReturnTreatmentInformationViaRest() throws Exception {
-		mockMvc.perform(get(String.format("/rest/v1/mtibaapi/treatments/%s", treatmentCode)))
-				.andExpect(status().isOk()).andDo(MockMvcResultHandlers.print());
+		mockMvc.perform(get(String.format("/rest/v1/mtibaapi/treatments/%s", treatmentCode))).andExpect(status().isOk());
 	}
 	
 	/**
@@ -56,7 +55,6 @@ public class MtibaapisControllerTest {
 	 */
 	@Test
 	public void getTreatmentInfo_shouldReturnTreatmentInformation() throws Exception {
-		OkHttpClient client = new OkHttpClient();
 		
 		MtibaapisController mtibaapisController = new MtibaapisController();
 		MtibaResponse mtibaResponse = mtibaapisController.getTreatmentInfo(treatmentCode);

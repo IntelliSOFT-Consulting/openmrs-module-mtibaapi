@@ -9,12 +9,8 @@
  */
 package org.openmrs.module.mtibaapis.web.controller;
 
-import java.io.IOException;
-
 import com.google.gson.Gson;
-
 import okhttp3.*;
-import org.apache.commons.cli.MissingArgumentException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
@@ -24,8 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kong.unirest.HttpResponse;
-import kong.unirest.Unirest;
+import java.io.IOException;
 
 /**
  * This class configured as controller using annotation and mapped with the URL of
@@ -38,72 +33,93 @@ public class MtibaapisController {
 	/** Logger for this class and subclasses */
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	public String getAccessToken() throws IOException {
-		//TODO Check whether token is still valid
+	public AccessToken getAccessToken() throws IOException {
 		
 		String username = Context.getAdministrationService().getGlobalProperty("mtibaapi.username");
-		String password = Context.getAdministrationService().getGlobalProperty("mtibaapi.username");
+		String password = Context.getAdministrationService().getGlobalProperty("mtibaapi.password");
 		String authenticationUrl = Context.getAdministrationService().getGlobalProperty("mtibaapi.authentication-url");
-		// String password = "wtgN33Qmlga8JgMag1RYFKdwsaFjcrz6wuk49taeHKW2IrnFGIDhrDBdikPj54HE";
-		// String authenticationUrl = "https://api.ke-acc.carepay.dev/api/integration/auth/accessToken";
-		OkHttpClient client = new OkHttpClient();
 		
+		OkHttpClient client = new OkHttpClient();
 		MediaType mediaType = MediaType.parse("application/json");
+		
 		RequestBody body = RequestBody.create(
 		    String.format("{\n\"username\": \"%s\",\n\"password\": \"%s\"\n}", username, password), mediaType);
 		Request request = new Request.Builder().url(authenticationUrl).post(body)
 		        .addHeader("content-type", "application/json").build();
 		
 		Response response = client.newCall(request).execute();
-		log.info(response.body().toString());
-		return response.body().toString();
+		
+		String responseText = response.body().string();
+		log.info(responseText);
+		
+		Gson gson = new Gson();
+		AccessToken accessToken = gson.fromJson(responseText, AccessToken.class);
+		return accessToken;
 	};
-
+	
 	/**
 	 * @should return treatment information
 	 * @should return treatment information via Rest
 	 */
 	@RequestMapping(value = "/treatments/{treatmentCode}", method = RequestMethod.GET)
 	public @ResponseBody
-	MtibaResponse getTreatmentInfo(@PathVariable String treatmentCode) throws IOException,
-	        MissingArgumentException {
+	MtibaResponse getTreatmentInfo(@PathVariable String treatmentCode) {
 		OkHttpClient client = new OkHttpClient();
-
-		TreatmentData treatmentData = new TreatmentData();
-		String accessToken = getAccessToken();
-		accessToken = "eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJlLWhvc3BpdGFsIiwicm9sZXMiOlsiUFJPVklERVJfQ0FTSElFUiIsIlBST1ZJREVSX1VTRVJfTUFOQUdFUiIsIlBST1ZJREVSX1JFQ0VQVElPTklTVCIsIlBST1ZJREVSX01FRElDIl0sInVzZXJJZCI6IjU5NjMzIiwiZXhwIjoxNjE2NTk2NjcwLCJncmFudHMiOnt9fQ.V7CgZR9IRdux5A3viwXyPmvmBTNDhTQ537oxlBbt73-v5854YipwPzBWXdRwRiqoXaT73zhVDfKZpB1DrZiWr5qyzeWghI02i8qT473JdM4UDfWML4JQR4LCEFQQVQtpuwgS_eo4HLGoZ0vFsRM9YS0PyCn2XthE4dV8gg4yAavy7ROB6AiOByxn3TTCUfuPUQPqz5YRdFVrvHAZp_O2Ip18iTO8RfxgIenoW0xOPG5HtPP5cjFTQyiYiWy398nNcwzTxj8W_bPNX85waodpr2-A4tySIBBVE3pSmWf3_MeHHjgtuQyH21lH0lNxiXGMVS92AanaBtU3bU0uKRSR-A";
-		Request request = new Request.Builder()
-		        .url(String.format("https://api.ke-acc.carepay.dev/api/integration/treatments/%s", treatmentCode))
-		        .get().addHeader("authorization", String.format("Bearer %s", accessToken))
-		        .addHeader("content-type", "application/json").build();
 		
-		Response response = client.newCall(request).execute();
-		String responseText = response.body().string();
 		MtibaResponse mtibaResponse = new MtibaResponse();
-		
-		Gson gson = new Gson();
-		if (responseText.contains("error")) {
-			MtibaErrorResponse errorResponse = gson.fromJson(responseText, MtibaErrorResponse.class);
+		TreatmentData treatmentData;
+		AccessToken accessToken = null;
+		try {
+			accessToken = getAccessToken();
+			Request request = new Request.Builder()
+			        .url(String.format("https://api.ke-acc.carepay.dev/api/integration/treatments/%s", treatmentCode)).get()
+			        .addHeader("authorization", String.format("Bearer %s", accessToken.getAccessToken()))
+			        .addHeader("content-type", "application/json").build();
 			
-			mtibaResponse.status = errorResponse.getStatus();
-			mtibaResponse.response = errorResponse;
-			log.debug(errorResponse);
-		} else {
-			treatmentData = gson.fromJson(responseText, TreatmentData.class);
+			Response response = client.newCall(request).execute();
+			String responseText = response.body().string();
 			
-			mtibaResponse.status = "200";
-			mtibaResponse.response = treatmentData;
+			Gson gson = new Gson();
+			if (responseText.contains("error")) {
+				MtibaErrorResponse errorResponse = gson.fromJson(responseText, MtibaErrorResponse.class);
+				
+				mtibaResponse.status = errorResponse.getStatus();
+				mtibaResponse.response = errorResponse;
+				log.debug(errorResponse);
+			} else {
+				treatmentData = gson.fromJson(responseText, TreatmentData.class);
+				
+				mtibaResponse.status = "200";
+				mtibaResponse.response = treatmentData;
+			}
+			
+		}
+		catch (IOException e) {
+			mtibaResponse.status = "404";
+			mtibaResponse.response = e;
 		}
 		
-		System.out.println(responseText);
-		
-		// treatmentData 
 		return mtibaResponse;
 	};
+	
+	public static class AccessToken {
+		
+		String accessToken;
+		
+		Integer accessTokenTtl;
+		
+		public String getAccessToken() {
+			return accessToken;
+		}
+		
+		public void setAccessToken(String accessToken) {
+			this.accessToken = accessToken;
+		}
+	}
 }
 
 /**
  * TODOs: Complete the TreatmentData class properties: Done Handle Dynamic Access Token generation
- * Test the new end-point on OpenMRS Non-priotity Create a unit test for the endpoint(s)
+ * Done Test the new end-point on OpenMRS Non-priotity Create a unit test for the endpoint(s) Done
  */
 
