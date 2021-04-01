@@ -13,6 +13,7 @@ import okhttp3.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.mtibaapis.api.Utils.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +40,7 @@ public class MtibaapisController {
 	private String authenticationUrl;
 	
 	public String getUsername() {
-		if (username.isEmpty()) {
+		if (StringUtils.isNullOrEmptyOrWhiteSpace(username)) {
 			username = Context.getAdministrationService().getGlobalProperty("mtibaapi.username");
 		}
 		return username;
@@ -50,7 +51,7 @@ public class MtibaapisController {
 	}
 	
 	public String getPassword() {
-		if (password.isEmpty()) {
+		if (StringUtils.isNullOrEmptyOrWhiteSpace(password)) {
 			password = Context.getAdministrationService().getGlobalProperty("mtibaapi.password");
 		}
 		return password;
@@ -61,7 +62,7 @@ public class MtibaapisController {
 	}
 	
 	public String getAuthenticationUrl() {
-		if (authenticationUrl.isEmpty()) {
+		if (StringUtils.isNullOrEmptyOrWhiteSpace(authenticationUrl)) {
 			authenticationUrl = Context.getAdministrationService().getGlobalProperty("mtibaapi.authentication-url");
 		}
 		return authenticationUrl;
@@ -73,9 +74,9 @@ public class MtibaapisController {
 	
 	public AccessToken getAccessToken() throws IOException {
 		
-		String username = this.username;
-		String password = this.password;
-		String authenticationUrl = this.authenticationUrl;
+		String username = this.getUsername();
+		String password = this.getPassword();
+		String authenticationUrl = this.getAuthenticationUrl();
 		
 		OkHttpClient client = new OkHttpClient();
 		MediaType mediaType = MediaType.parse("application/json");

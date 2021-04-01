@@ -30,7 +30,7 @@ public class MtibaapisControllerTest {
 	
 	private MockMvc mockMvc;
 	
-	private MtibaapisController controllers;
+	private MtibaapisController mtibaapisController;
 	
 	private String treatmentCode;
 	
@@ -38,7 +38,7 @@ public class MtibaapisControllerTest {
 	public void startService() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		
-		MtibaapisController mtibaapisController = new MtibaapisController();
+		mtibaapisController = new MtibaapisController();
 		mtibaapisController.setUsername("e-hospital");
 		mtibaapisController.setPassword("wtgN33Qmlga8JgMag1RYFKdwsaFjcrz6wuk49taeHKW2IrnFGIDhrDBdikPj54HE");
 		mtibaapisController.setAuthenticationUrl("https://api.ke-acc.carepay.dev/api/integration/auth/accessToken");
@@ -69,7 +69,6 @@ public class MtibaapisControllerTest {
 	@Test
 	public void getTreatmentInfo_shouldReturnTreatmentInformation() throws Exception {
 		
-		MtibaapisController mtibaapisController = new MtibaapisController();
 		MtibaResponse mtibaResponse = mtibaapisController.getTreatmentInfo(treatmentCode);
 		Assert.assertNotNull(mtibaResponse);
 	}
