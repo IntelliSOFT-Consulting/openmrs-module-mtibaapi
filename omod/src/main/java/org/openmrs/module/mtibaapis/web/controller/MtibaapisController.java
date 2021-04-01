@@ -3,7 +3,6 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
  * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
- *
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
@@ -33,11 +32,50 @@ public class MtibaapisController {
 	/** Logger for this class and subclasses */
 	protected final Log log = LogFactory.getLog(getClass());
 	
+	private String username;
+	
+	private String password;
+	
+	private String authenticationUrl;
+	
+	public String getUsername() {
+		if (username.isEmpty()) {
+			username = Context.getAdministrationService().getGlobalProperty("mtibaapi.username");
+		}
+		return username;
+	}
+	
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	public String getPassword() {
+		if (password.isEmpty()) {
+			password = Context.getAdministrationService().getGlobalProperty("mtibaapi.password");
+		}
+		return password;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public String getAuthenticationUrl() {
+		if (authenticationUrl.isEmpty()) {
+			authenticationUrl = Context.getAdministrationService().getGlobalProperty("mtibaapi.authentication-url");
+		}
+		return authenticationUrl;
+	}
+	
+	public void setAuthenticationUrl(String authenticationUrl) {
+		this.authenticationUrl = authenticationUrl;
+	}
+	
 	public AccessToken getAccessToken() throws IOException {
 		
-		String username = Context.getAdministrationService().getGlobalProperty("mtibaapi.username");
-		String password = Context.getAdministrationService().getGlobalProperty("mtibaapi.password");
-		String authenticationUrl = Context.getAdministrationService().getGlobalProperty("mtibaapi.authentication-url");
+		String username = this.username;
+		String password = this.password;
+		String authenticationUrl = this.authenticationUrl;
 		
 		OkHttpClient client = new OkHttpClient();
 		MediaType mediaType = MediaType.parse("application/json");
@@ -55,7 +93,20 @@ public class MtibaapisController {
 		Gson gson = new Gson();
 		AccessToken accessToken = gson.fromJson(responseText, AccessToken.class);
 		return accessToken;
-	};
+	}
+	
+	;
+	
+	@RequestMapping(method = RequestMethod.GET, headers = "Accept=*/*")
+	public @ResponseBody
+	MtibaResponse test() {
+		MtibaResponse mtibaResponse = new MtibaResponse();
+		mtibaResponse.status = "200";
+		mtibaResponse.response = "qwerty";
+		
+		return mtibaResponse;
+		
+	}
 	
 	/**
 	 * @should return treatment information
@@ -100,7 +151,9 @@ public class MtibaapisController {
 		}
 		
 		return mtibaResponse;
-	};
+	}
+	
+	;
 	
 	public static class AccessToken {
 		

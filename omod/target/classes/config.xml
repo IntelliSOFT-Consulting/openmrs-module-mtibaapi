@@ -43,18 +43,31 @@
 	 /Required Privileges -->
 
 
-	<!-- Required Global Properties 
+	<!-- Required Global Properties -->
 	<globalProperty>
-		<property>mtibaapis.someProperty</property>
-		<defaultValue></defaultValue>
+		<property>mtibaapi.username</property>
+		<defaultValue>e-hospital</defaultValue>
 		<description>
-			A description of the global property goes here.  The description
-			should explain enough for administrators to understand the purpose
-			and possible values for the global property.
+			API username for Mtiba API authentication
 		</description>
 	</globalProperty>
-	/Required Global Properties -->
-	
+
+	<globalProperty>
+		<property>mtibaapi.password</property>
+		<defaultValue></defaultValue>
+		<description>
+			API password for Mtiba API authentication
+		</description>
+	</globalProperty>
+
+	<globalProperty>
+		<property>mtibaapi.authentication-url</property>
+		<defaultValue>https://api.ke-acc.carepay.dev/api/integration/auth/accessToken</defaultValue>
+		<description>
+			API Authentication URL for Mtiba API authentication
+		</description>
+	</globalProperty>
+
 	<!--
 	<dwr>
 		<allow>
