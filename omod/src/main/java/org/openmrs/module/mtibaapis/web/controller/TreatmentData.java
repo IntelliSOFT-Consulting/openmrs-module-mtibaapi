@@ -82,6 +82,14 @@ public class TreatmentData {
 		
 		Account account;
 		
+		public Account getAccount() {
+			return account;
+		}
+		
+		public void setAccount(Account account) {
+			this.account = account;
+		}
+		
 		private class Account {
 			
 			String program;
@@ -129,6 +137,16 @@ public class TreatmentData {
 	private class Patient extends Person {
 		
 		String membershipNumber;
+		
+		String cover;
+		
+		public String getCover() {
+			return cover;
+		}
+		
+		public void setCover(String cover) {
+			this.cover = cover;
+		}
 		
 		public String getMembershipNumber() {
 			return membershipNumber;
