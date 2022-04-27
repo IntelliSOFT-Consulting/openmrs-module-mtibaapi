@@ -132,7 +132,7 @@ public class MtibaapisController {
 			String responseText = response.body().string();
 			
 			Gson gson = new Gson();
-			if (responseText.contains("error")) {
+			if (response.networkResponse().code() != 200) {
 				MtibaErrorResponse errorResponse = gson.fromJson(responseText, MtibaErrorResponse.class);
 				
 				mtibaResponse.status = errorResponse.getStatus();
